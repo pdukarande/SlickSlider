@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Slick Slider Videos</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick-theme.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" />
+
+    <style>
+        .fas {
+            color: black !important;
+            font-size: 30px !important;
+        }
+
+        body > div.slider.slick-initialized.slick-slider > button.slick-prev.slick-arrow:before, body > div.slider.slick-initialized.slick-slider > button.slick-next.slick-arrow:before{
+            display: none !important;
+        }
+        .slick-prev:before, .slick-next:before {
+            font-size: 30px !important;
+            color: rgb(0, 0, 0) !important;
+        }
+
+        button.slick-prev.slick-arrow, button.slick-next.slick-arrow {
+            color: #000 !important;
+        }
+
+        .slider {
+            width: 80%;
+            margin: auto;
+            position: relative;
+        }
+
+        .slick-slide {
+            text-align: center;
+            padding: 10px;
+        }
+
+        .video-container {
+            position: relative;
+            overflow: hidden;
+            width: 100%;
+            height: 0;
+            padding-top: 56.25%;
+        }
+
+        .video-container iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+
+        .indicator {
+            position: relative;
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .dot-container {
+            display: inline-block;
+            position: relative;
+        }
+
+        .dot-container span {
+            display: inline-block;
+            width: 10px;
+            height: 10px;
+            margin: 0 5px;
+            background-color: lightgray;
+            border-radius: 50%;
+            transition: background-color 0.3s;
+        }
+
+        .dot-container span.active {
+            background-color: black;
+        }
+
+        .animated-dot {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            background-color: black;
+            border-radius: 50%;
+            transition: left 0.3s;
+        }
+    </style>
+</head>
+<body>
+
+<div class="slider">
+    <div>
+        <div class="video-container">
+            <iframe width="1273" height="716" src="https://www.youtube.com/embed/du174ZKSWZk" title="Dark Souls short gif - Anime style" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+        </div>
+    </div>
+    <div>
+        <div class="video-container">
+            <iframe width="1273" height="716" src="https://www.youtube.com/embed/Xv-EET_Zhqs" title="aesthetic anime night rain | youtube shorts | gif loop" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+        </div>
+    </div>
+    <div>
+        <div class="video-container">
+           <iframe width="1273" height="716" src="https://www.youtube.com/embed/2AbW6Wq4-LE" title="Funny video Ha Ha | GIF IN EMOJI | | GIN | #viral #short" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+        </div>
+    </div>
+    <div>
+        <div class="video-container">
+            <iframe width="853" height="716" src="https://www.youtube.com/embed/pQ7vNk5IV90" title="short gif animation" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+        </div>
+    </div>
+    <div>
+        <div class="video-container">
+           <iframe width="1122" height="716" src="https://www.youtube.com/embed/EDQ1dmFEGiI" title="Gif video clip" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+        </div>
+    </div>
+    <div>
+        <div class="video-container">
+           <iframe width="1273" height="716" src="https://www.youtube.com/embed/GkPscB-_InU" title="Intro video golden particle text reveal - No Copyright video" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+        </div>
+    </div>
+</div>
+<div class="indicator">
+    <div class="dot-container">
+        <span class="active"></span>
+        <span></span>
+        <span></span>
+        <!-- <div class="animated-dot"></div> -->
+    </div>
+</div>
+
+
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.min.js"></script>
+<script>
+var players = {};
+var currentPlayer = null;
+
+function onYouTubeIframeAPIReady() {
+    $('.video-container iframe').each(function() {
+        var id = $(this).attr('src').split('/').pop().split('?')[0]; // Extract video ID
+        players[id] = new YT.Player(this, {
+            events: {
+                'onStateChange': function(event) {
+                    // Check if a video is currently playing
+                    if (event.data === YT.PlayerState.PLAYING) {
+                        // If there is a current player and it's not the one that started playing, pause it
+                        if (currentPlayer && currentPlayer !== event.target) {
+                            currentPlayer.pauseVideo();
+                        }
+                        // Set the current player to the one that's playing
+                        currentPlayer = event.target;
+                    } else if (event.data === YT.PlayerState.ENDED) {
+                        // Reset currentPlayer when the video ends
+                        currentPlayer = null;
+                    }
+                }
+            }
+        });
+    });
+}
+
+
+    $(document).ready(function() {
+        // Load the YouTube Iframe API
+        var tag = document.createElement('script');
+        tag.src = "https://www.youtube.com/iframe_api";
+        document.body.appendChild(tag);
+
+        $('.slider').slick({
+            dots: false,  // Disable default dots
+            infinite: true,
+            speed: 500,
+            slidesToShow: 3, // Show one slide at a time
+            slidesToScroll: 1,
+            prevArrow: '<button type="button" class="slick-prev"><i class="fas fa-chevron-left"></i></button>',
+            nextArrow: '<button type="button" class="slick-next"><i class="fas fa-chevron-right"></i></button>',
+            responsive: [
+                {
+                    breakpoint: 768,
+                    settings: {
+                        slidesToShow: 1,
+                        slidesToScroll: 1
+                    }
+                }
+            ]
+        });
+
+        // Update custom indicator based on current slide
+        $('.slider').on('beforeChange', function(event, slick, currentSlide, nextSlide) {
+            if (currentPlayer) {
+                currentPlayer.pauseVideo(); // Pause the video when sliding
+            }
+
+            // Update the active indicator based on the nextSlide index
+            $('.indicator span').removeClass('active');
+            $('.indicator span').eq(nextSlide % 3).addClass('active'); // Cycle through the three dots
+
+            // Move the animated dot
+            var dotWidth = 20; // Width of each dot + margin
+            $('.animated-dot').css('left', (nextSlide % 3 * dotWidth) + 'px');
+        });
+
+        // Handle custom indicator clicks
+        $('.indicator span').on('click', function() {
+            var index = $(this).index();
+            $('.slider').slick('slickGoTo', index); // Go to the appropriate slide
+        });
+    });
+</script>
+</body>
+</html>
